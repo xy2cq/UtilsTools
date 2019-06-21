@@ -1,0 +1,57 @@
+每分钟金钱,Gold earned per minute
+每分钟经验,Experience received per minute
+持续未受到敌方英雄攻击的累积时间,The duration that player hasn't taken any damage from enemy heroes.
+自己经济占团队经济总和的比例,Gold Share: Average share of team's total gold earned
+自己团战伤害占团队团战伤害总和的比例,Damage Share: Average share of team's total damage to heroes
+对敌方英雄造成伤害与自己所获得金钱数的比例,Damage dealt / gold earned 
+平均每场的击杀数,Average Kills Per Game
+通过补刀获得的经济占自己总经济总和的比例,Gold from Last Hits/ Total Gold
+通过击杀与助攻获得的经济占自己总经济总和的比例,Gold from Kills and Assists/ Total Gold
+参与团战数占总团战数的比例,Participated team-fights/Total amount of team-fights
+对线期获得的金币总量与承受英雄伤害均值比,Damage Taken/ Gold Earned (Laning Phase)
+每分钟金钱,Gold earned per minute
+每分钟经验,Experience received per minute
+自己经济占团队经济总和的比例,Gold Share: Average share of team's total gold earned
+自己团战伤害占团队团战伤害总和的比例,Damage Share: Average share of team's total damage to heroes
+对敌方英雄造成伤害与自己所获得金钱数的比例,Damage dealt / gold earned 
+自己团战承受伤害占团队团战承受伤害总和比例,Damage Taken Share: Average share of team's total damage taken
+自己英雄承受的伤害与自己所获得的金钱数的比例,Damage Taken / Gold Earned
+平均每场的击杀数,Average Kills Per Game
+比赛前10分钟的击杀数,Kills at the 10-minute mark
+团战中自己首先攻打敌方的次数,The number of initiations
+参与团战数占总团战数的比例,Participated team-fights/Total amount of team-fights
+每分钟金钱,Gold earned per minute
+每分钟经验,Experience received per minute
+对线期承受英雄伤害与死亡次数比,Damage Taken/ Deaths  (Laning Phase)
+比赛前10分钟承受敌方英雄的伤害,Damage taken at the 10-minute mark
+比赛前10分钟的对敌方英雄造成的伤害,Damage dealt at the 10-minute mark
+自己团战承受伤害占团队团战承受伤害总和的比例,Damage Taken Share: Average share of team's total damage taken
+自己英雄承受的伤害与自己所获得的金钱数的比例,Damage Taken Share/ Gold Share
+团战中自己首先攻打敌方的次数,The number of initiations
+参与团战数占总团战数的比例,Participated team-fights/Total amount of team-fights
+团战时，我方人数多于敌方人数的团战次数,The number of team fights with a numerical superiority 
+团战时，我方人数多于敌方人数时获胜的团战占比,The number of winning team fights with a numerical superiority / Total number of team-fights
+放置假眼的次数,Wards Placed
+放置假眼数量*假眼的存活时间,Number of wards placed * average wards surviving time
+在自己提供真视视野时，排掉的真/假眼数量,Number of de-wards
+在自己提供真视视野时，排掉的真/假眼的*被排眼的剩余存活时间,Total remaining time of wards/sentries player has de-warded
+使用显影之尘的次数,Dust used
+使用显影之尘后发现隐身单位的次数占总撒粉数的比例,Number of revealing an enemy with dust / Total number of dust used
+己方视野占整个地图的比例,Vision control rate of the map
+购买诡计之雾次数,Smoke purchased
+撞破敌方诡计之雾状态的次数,The number of breaking enemy's smoke 
+死亡后30秒内，在死亡坐标点一定范围内无其他队友死亡的次数,Informative: No teammate dies near the area this player just died
+参与团战数占总团战数的比例,Participated team-fights/Total amount of team-fights
+拉野后，队友击杀野怪时获得金币总数,Gold Earned from stacking neutral creeps
+放置假眼的次数,Wards Placed
+放置假眼数量*假眼的存活时间,Number of wards placed * average wards surviving time
+在自己提供真视视野时，排掉的真/假眼数量,Number of de-wards
+在自己提供真视视野时，排掉的真/假眼的*被排眼的剩余存活时间,Total remaining time of wards/sentries player has de-warded
+使用显影之尘的次数,Dust used
+使用显影之尘后发现隐身单位的次数占总撒粉数的比例,Number of revealing an enemy with dust / Total number of dust used
+己方视野占整个地图的比例,Vision control rate of the map
+购买诡计之雾次数,Smoke purchased
+撞破敌方诡计之雾状态的次数,The number of breaking enemy's smoke 
+死亡后30秒内，在死亡坐标点一定范围内无其他队友死亡的次数,Informative: No teammate dies near the area this player just died
+参与团战数占总团战数的比例,Participated team-fights/Total amount of team-fights
+拉野后，队友击杀野怪时获得金币总数,Gold Earned from stacking neutral creeps
