@@ -1,0 +1,15 @@
+{
+	"name": "utils-tools",
+	"version": "0.0.1",
+	"description": "自用的一些小工具包",
+	"main": "index.js",
+	"keywords": [
+		"utils",
+		"tools"
+	],
+	"author": "caoqi",
+	"license": "ISC",
+	"dependencies": {
+		"moment": "^2.24.0"
+	}
+}
