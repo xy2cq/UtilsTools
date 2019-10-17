@@ -16,8 +16,8 @@ const TexasHoldem = {
   },
   init: () => { //新建一副扑克
     let poker = [];
-    let color = ['♠️','♥️','草花','方块']
-    for(let i=1; i<14; i++){
+    let color = [1,2,3,4] //1：黑桃，2：红心，3：草花， 4：方块
+    for(let i=2; i<15; i++){ //为了计算方便，A算14
       color.forEach(item=>{
         poker.push([i,item])
       })
@@ -44,10 +44,49 @@ const TexasHoldem = {
     TexasHoldem.PrivateCard.forEach(item=>{
       TexasHoldem.AllCard.push([...item, ...TexasHoldem.PublicCard])
     })
-    console.log(TexasHoldem.PrivateCard)
     console.log(TexasHoldem.AllCard)
+  },  
+  sortCards:()=>{
+    TexasHoldem.AllCard.forEach(item=>{
+      TexasHoldem.calculateCards(item)
+    })
+   
+  },
+  sortNumber: (a,b) => {
+    return a - b
+  },
+  unique (arr) {
+    return Array.from(new Set(arr))
+  },
+  calculateCards:(item) => { //计算牌面
+    let number = []; //牌面数字，用来计算是否是顺子
+    let color = []; //牌面花色，用来计算是否是同花
+    item.forEach(item2 => {
+      number.push(item2[0])
+      color.push(item2[1])
+    })
+    number = TexasHoldem.unique(number)
+    if(number.indexOf(14) > -1){
+      number.push(1)
+    }
+    number = number.sort(TexasHoldem.sortNumber)
+    color = color.sort(TexasHoldem.sortNumber)
+    let oneNumber = 0;
+    let max=0
+    for(let i = 0 ; i < 6 ; i ++){
+      if(number[i+1] - number[i] === 1){
+        oneNumber ++;
+        if(oneNumber === 4){
+          max=number[i+1]
+          return
+        }
+      }else if(oneNumber > 0 ){
+        oneNumber --;
+      }
+    }
+    console.log(item, number, color, oneNumber)
   }
-  
 }
 
 TexasHoldem.startDealCards(9)
+TexasHoldem.sortCards()
