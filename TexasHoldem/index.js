@@ -41,15 +41,20 @@ const TexasHoldem = {
     for(let i=2*num; i<2*num+5; i++){
       TexasHoldem.PublicCard.push(poker[i])
     }
+
     TexasHoldem.PrivateCard.forEach(item=>{
       TexasHoldem.AllCard.push([...item, ...TexasHoldem.PublicCard])
     })
+    console.log('AllCard')
     console.log(TexasHoldem.AllCard)
-  },  
+  },
   sortCards:()=>{
+    let resultArray = []
     TexasHoldem.AllCard.forEach(item=>{
-      console.log(TexasHoldem.calculateCards(item))
+      resultArray.push(TexasHoldem.calculateCards(item))
     })   
+    console.log('resultArray')
+    console.log(resultArray.toString())
   },
   sortNumber: (a,b) => {
     return b-a
@@ -59,47 +64,41 @@ const TexasHoldem = {
   },
   calculateCards:(item) => { //计算牌面
     if( TexasHoldem.isTonghuaShun(item)){
-      return "同花顺"
-    } else if(TexasHoldem.isShunzi(item)){
-      return ["顺子",TexasHoldem.isShunzi(item)]
+      return ["同花顺", TexasHoldem.isTonghuaShun(item)]
+    } else if(TexasHoldem.isSitiao(item)){
+      return TexasHoldem.isSitiao(item)
     } else if(TexasHoldem.isTonghua(item)){
       return "同花"
+    } else if(TexasHoldem.isShunzi(item)){
+      return ["顺子",TexasHoldem.isShunzi(item)]
     } else{
       return TexasHoldem.isNum(item)
     }
   },
   isTonghuaShun:(item) => { //计算牌面
-    let number = []; //牌面数字，用来计算是否是顺子
-    item.forEach(item2 => {
-      if(item2[0] === 1){
-        number.push(14+item2[1]*100)
-      }
-      number.push(item2[0]+item2[1]*100)
-    })
-    number = number.sort(TexasHoldem.sortNumber)
-    let oneNumber = 0;
-    let max=0
-    number.forEach((item, index)=>{
-      if(number[index] - number[index+1] === 1){
-        oneNumber ++;
-        if(oneNumber === 4){
-          max=number[index+1]+4
-          return
-        }
-      }else if(oneNumber > 0 ){
-        oneNumber = 0;
-      }
-    })
-    if(oneNumber === 4){
-      return max
-    } else {
+    res = TexasHoldem.isShunzi(item,true);
+    if(res){
+      return res % 100;
+    }else{
+      return false;
+    }
+  },
+  isSitiao:(item) => { //计算是否是四条
+    let result = TexasHoldem.isNum(item)
+    if(result[0] === '四条'){
+      return result
+    }else{
       return false
     }
   },
-  isShunzi:(item)=> { //计算牌面
+  isShunzi:(item,huase=false)=> { //计算牌面 花色参数用来查看是否是同花顺
     let number = []; //牌面数字，用来计算是否是顺子
     item.forEach(item2 => {
-      number.push(item2[0])
+      if(huase){
+        number.push(item2[0] + item2[1] * 100)
+      }else{
+        number.push(item2[0])
+      }
     })
     number = TexasHoldem.unique(number)
     if(number.indexOf(1) > -1){
@@ -112,8 +111,7 @@ const TexasHoldem = {
       if(number[i] - number[i+1] === 1){
         oneNumber ++;
         if(oneNumber === 4){
-          max=number[i+1]+4
-          return
+          return number[i+1]+4;
         }
       }else if(oneNumber > 0 ){
         oneNumber = 0;
@@ -151,13 +149,19 @@ const TexasHoldem = {
   isNum: (item) => {
     let number = []; //牌面数字，用来计算是否是对子，葫芦，三条等
     item.forEach(item2 => {
-      number.push(item2[0])
+      if(item2[0] == 1){
+        number.push(14)
+      }else{
+        number.push(item2[0])
+      }
     })
     number = number.sort(TexasHoldem.sortNumber)
+    console.log('sortResult')
+    console.log(number)
     let nowNumber = number[0]
     let maxNumber = number[0]
     let oneNumber = {}
-    for(let i = 1 ; i < 6 ; i ++){      
+    for(let i = 1 ; i < 7 ; i ++){
       if(number[i] - nowNumber === 0){    
         if(oneNumber[nowNumber]){
           oneNumber[nowNumber] ++
@@ -168,16 +172,16 @@ const TexasHoldem = {
         nowNumber = number[i]
       }
     }
+    console.log('oneNumber')
+    console.log(oneNumber)
     let arr = Object.keys(oneNumber)
-    let maxlength = oneNumber[arr[0]] || 0
-    let minlength = 0
-    if(oneNumber[arr[1]]&&oneNumber[arr[1]]>oneNumber[arr[0]]){
-      maxlength = oneNumber[arr[1]]
-      maxNumber = arr[1]
-    } else if (oneNumber[arr[1]]){
-      minlength = oneNumber[arr[1]]
-    } else if (oneNumber[arr[0]]) {
-      maxNumber = arr[0]
+    let maxlength = 0
+    let minlength = arr.length >= 2 ? 2 : 0
+    for (let j in oneNumber){
+      if(oneNumber[j] >= maxlength){
+        maxlength = oneNumber[j]
+        maxNumber = j
+      }
     }
     switch(maxlength){
       case 0:
@@ -195,7 +199,7 @@ const TexasHoldem = {
           return ["葫芦",maxNumber]
         }        
       case 4:
-        return ["四个",maxNumber]
+        return ["四条",maxNumber]
       default:
         break
     }
