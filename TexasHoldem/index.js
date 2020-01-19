@@ -2,7 +2,7 @@ const TexasHoldem = {
   PrivateCard:[], //私有牌 2张
   PublicCard:[], //公共牌 5张
   AllCard:[], //总共牌 7张
-   sort:{
+  sort:{
     1:'高牌',
     2:'一对',
     3:'两对',
@@ -15,6 +15,9 @@ const TexasHoldem = {
     10:'皇家同花顺',
   },
   init: () => { //新建一副扑克
+    TexasHoldem.PrivateCard = [],
+    TexasHoldem.PublicCard = [],
+    TexasHoldem.AllCard = []
     let poker = [];
     let color = [1,2,3,4] //1：黑桃，2：红心，3：草花， 4：方块
     for(let i=1; i<14; i++){ //为了计算方便，A算14
@@ -45,16 +48,15 @@ const TexasHoldem = {
     TexasHoldem.PrivateCard.forEach(item=>{
       TexasHoldem.AllCard.push([...item, ...TexasHoldem.PublicCard])
     })
-    console.log('AllCard')
-    console.log(TexasHoldem.AllCard)
+    // console.log('AllCard')
+    // console.log(TexasHoldem.AllCard)
   },
   sortCards:()=>{
     let resultArray = []
     TexasHoldem.AllCard.forEach(item=>{
       resultArray.push(TexasHoldem.calculateCards(item))
     })   
-    console.log('resultArray')
-    console.log(resultArray.toString())
+    return resultArray
   },
   sortNumber: (a,b) => {
     return b-a
@@ -67,8 +69,10 @@ const TexasHoldem = {
       return ["同花顺", TexasHoldem.isTonghuaShun(item)]
     } else if(TexasHoldem.isSitiao(item)){
       return TexasHoldem.isSitiao(item)
+    } else if(TexasHoldem.isHulu(item)){
+      return TexasHoldem.isHulu(item)
     } else if(TexasHoldem.isTonghua(item)){
-      return "同花"
+      return ["同花",item]
     } else if(TexasHoldem.isShunzi(item)){
       return ["顺子",TexasHoldem.isShunzi(item)]
     } else{
@@ -86,6 +90,14 @@ const TexasHoldem = {
   isSitiao:(item) => { //计算是否是四条
     let result = TexasHoldem.isNum(item)
     if(result[0] === '四条'){
+      return result
+    }else{
+      return false
+    }
+  },
+  isHulu:(item) => { //计算是否是四条
+    let result = TexasHoldem.isNum(item)
+    if(result[0] === '葫芦'){
       return result
     }else{
       return false
@@ -130,18 +142,18 @@ const TexasHoldem = {
     })
     color = color.sort(TexasHoldem.sortNumber)
     let oneNumber = 0
-    for(let i = 0 ; i < 6 ; i ++){
+    for(let i = 0 ; i < 7 ; i ++){
       if(color[i] - color[i+1] === 0){
         oneNumber ++
-        if(oneNumber === 3){
-          return
+        if(oneNumber === 4){
+          return ['同花', item]
         }
       }else if(oneNumber > 0 ){
         oneNumber = 0;
       }
     }
     if(oneNumber === 4){
-      return '同花'
+      return ['同花', item]
     } else {
       return false
     }
@@ -156,8 +168,8 @@ const TexasHoldem = {
       }
     })
     number = number.sort(TexasHoldem.sortNumber)
-    console.log('sortResult')
-    console.log(number)
+    // console.log('sortResult')
+    // console.log(number)
     let nowNumber = number[0]
     let maxNumber = number[0]
     let oneNumber = {}
@@ -172,8 +184,8 @@ const TexasHoldem = {
         nowNumber = number[i]
       }
     }
-    console.log('oneNumber')
-    console.log(oneNumber)
+    // console.log('oneNumber')
+    // console.log(oneNumber)
     let arr = Object.keys(oneNumber)
     let maxlength = 0
     let minlength = arr.length >= 2 ? 2 : 0
@@ -203,8 +215,22 @@ const TexasHoldem = {
       default:
         break
     }
+  },
+  tongji: (time) => {
+    let resultArray = {}
+    for(let i=0;i<time;i++){
+      TexasHoldem.startDealCards(9)
+      let result = TexasHoldem.sortCards()
+      result.forEach(item => {
+        if(resultArray[item[0]]){
+          resultArray[item[0]]++
+        }else{
+          resultArray[item[0]] = 1
+        }
+      })
+    }   
+    console.log(resultArray)
   }
 }
 
-TexasHoldem.startDealCards(9)
-TexasHoldem.sortCards()
+TexasHoldem.tongji(1000)
