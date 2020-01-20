@@ -216,10 +216,10 @@ const TexasHoldem = {
         break
     }
   },
-  tongji: (time) => {
+  tongji: (personNum, times) => {
     let resultArray = {}
-    for(let i=0;i<time;i++){
-      TexasHoldem.startDealCards(9)
+    for(let i=0;i<times;i++){
+      TexasHoldem.startDealCards(personNum)
       let result = TexasHoldem.sortCards()
       result.forEach(item => {
         if(resultArray[item[0]]){
@@ -232,5 +232,3 @@ const TexasHoldem = {
     console.log(resultArray)
   }
 }
-
-TexasHoldem.tongji(1000)

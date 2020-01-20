@@ -5,8 +5,25 @@
 <title>texasholdem</title>
 </head>
 <body>
-
+  <div class="ipnut-box">
+    <span class="label">参与人数</span>
+    <input type="number" id="person"/>
+  </div>
+  <div class="ipnut-box">
+    <span class="label">牌局总数</span>
+    <input type="number" id="times"/>
+  </div>
+  <div class="button">
+    <button id="caluculate" >计算</button>
+  </div>
 </body>
 
 <script src="index.js" ></script>
+<script>
+  document.querySelector('#caluculate').addEventListener("click",function(){
+    let perasonNumber = Number(document.querySelector('#person').value) || 1
+    let times = Number(document.querySelector('#times').value) || 1
+    TexasHoldem.tongji(perasonNumber, times)
+  })
+</script>
 </html>
