@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket 连接尝试</title>
+    <style type="text/css">
+        .btn{width:100px;margin-left:10px;line-height:24px;height:24px;}
+        .right{float:left;width:44%;margin-top:10px;}
+        .span{width:75px;float:left;}
+        .spantext{font-size: 14px;margin-left: 10px;}
+    </style>
+</head>
+<body>
+<textarea id="result" style="width:55%;min-height:450px;float:left;"></textarea>
+<div style="float:left;width:44%"><span class="span">Server:</span><input id="server" value=""/><button id="connect" onclick="connect();" class="btn">Connect</button></div>
+<div style="float:left;width:44%"><span class="span">Stbid:</span><input id="gretstbid" value=""/><span class="spantext">Greeting:</span><span id="greeting" class="spantext">0</span></div>
+<div style="float:left;width:44%"><span class="span">CStbid:</span><input id="stbid" value=""/></div>
+<div class="right"><span class="span">Methods:</span>
+<select onchange="changedata(this)">
+    <option value="token" selected>token</option>
+    <option value="remoter">remoter</option>
+    <option value="search">search</option>
+    <option value="texttoaction">texttoaction</option>
+    <option value="channelcode">channelcode</option>
+    <option value="index">index</option>
+    <option value="message">message</option>
+    <option value="status">status</option>
+</select>
+</div>
+<div style="float:left;width:44%"><span class="span">Token:</span><input id="token" value=""/></div>
+<div class="right"><textarea id="sendtext" style="width:80%;min-height:150px;float:left;"></textarea></div>
+<div class="right"><button onclick="senddata();" style="float:left;">Send Data</button></div>
+<div class="right"><button onclick="closewb();" style="float:left;">Close WebSocket</button></div>
+<div class="right"><button onclick="clearresult();" style="float:left;">Clear</button></div>
+
+<script>
+    var wsServer = 'ws://',websocket,$stbid,$token,out=0;
+    $stbid = document.getElementById("stbid").value;
+    function connect(){
+        closewb();
+        var IP = document.getElementById("server").value;
+        websocket = new WebSocket(wsServer + IP);
+        websocket.onopen = function (evt) {
+            document.getElementById("result").value = "Connected:"+IP+"\n";
+            greeting_to_server(); 
+            timetag = setInterval(function() {
+                out = 1;
+                greeting_to_server(); 
+            },
+            15000);
+        };
+
+        websocket.onclose = function (evt) {
+            document.getElementById("result").value = document.getElementById("result").value + "Disconnected\n";
+        };
+
+        websocket.onmessage = function (evt) {
+            action_cmd = JSON.parse(evt.data);
+            if(out==1 && action_cmd.action=="greeting_res" && action_cmd.params.res==1){
+                document.getElementById('greeting').innerHTML = (parseInt(document.getElementById('greeting').innerHTML) + 1);
+            }else{
+                document.getElementById("result").value = document.getElementById("result").value + "Receive:" + evt.data + "\n";
+                document.getElementById("result").scrollTop = document.getElementById("result").scrollHeight;
+            }
+            switch (action_cmd.action){
+                default:
+                    if(action_cmd.token){
+                        $token = action_cmd.token;
+                        document.getElementById("token").value = $token;
+                        document.getElementById("result").value = document.getElementById("result").value + "Get token:" + $token +"\n\n";
+                    }
+                break;
+            }
+        };
+
+        websocket.onerror = function (evt, e) {
+            document.getElementById("result").value = document.getElementById("result").value + "Error occured:\t" + evt.data;
+        };
+    }
+    function cmd(action,param){
+        var cmd= {'action':action,'params':param};
+        return JSON.stringify(cmd);
+    }
+    function senddata(){
+        $cmd = document.getElementById("sendtext").value;
+        if($token != document.getElementById("token").value){
+            $cmd = $cmd.replace($token,document.getElementById("token").value);
+            document.getElementById("sendtext").value = $cmd;
+            $token = document.getElementById("token").value;
+        }
+        document.getElementById("result").value = document.getElementById("result").value + "Send:\t"+$cmd+"\n";
+        websocket.send($cmd);
+    }
+    function greeting_to_server(){
+        stbid = document.getElementById("gretstbid").value;
+        $cmd = cmd('greeting',{'stbid':stbid});
+        if(out==0){
+            document.getElementById("result").value = document.getElementById("result").value + "Send:\t"+$cmd+"\n";
+        }
+        websocket.send($cmd);
+    }
+    function changedata(obj){
+        $token = document.getElementById("token").value;
+        $cmd = obj.options[obj.selectedIndex].value;
+        $stbid = document.getElementById("stbid").value;
+        switch($cmd){
+            case "token":
+                document.getElementById("sendtext").value = '{"action":"token","params":{"access_key":"430389b4b32d45d284214ea06f99160a","stbid":"'+$stbid+'","branchcode":"SH"}}';
+            break;
+            case "remoter":
+                document.getElementById("sendtext").value = '{"action":"remoter","params":{"stbid":"'+$stbid+'","token":"'+$token+'","keycode":"53"}}';
+            break;
+            case "search":
+                document.getElementById("sendtext").value = '{"action":"search","params":{"stbid":"'+$stbid+'","token":"'+$token+'","content":"\u6218\u72fc\u4e8c"}}';
+            break;
+            case "texttoaction":
+                document.getElementById("sendtext").value = '{"action":"texttoaction","params":{"stbid":"'+$stbid+'","token":"'+$token+'","content":"\u6211\u60f3\u770b\u5434\u4eac\u4e3b\u6f14\u7684\u6218\u72fc\u4e8c"}}';
+            break;
+            case "channelcode":
+                document.getElementById("sendtext").value = '{"action":"channelcode","params":{"stbid":"'+$stbid+'","token":"'+$token+'","channelcode":"RMZY"}}';
+            break;
+            case "index":
+                document.getElementById("sendtext").value = '{"action":"index","params":{"stbid":"'+$stbid+'","token":"'+$token+'","index":"5"}}';
+            break;
+            case "message":
+                document.getElementById("sendtext").value = '{"action":"message","params":{"stbid":"'+$stbid+'","branchcode":"SH"}}';
+            break;
+            case "status":
+                document.getElementById("sendtext").value = '{"action":"status","params":{"stbid":"'+$stbid+'","branchcode":"SH"}}';
+            break;
+        }
+    }
+    function closewb(){
+        if(websocket){
+            websocket.close();
+        }
+    }
+    function clearresult(){
+        document.getElementById("result").value = "";
+    }
+
+</script>
+</body>
+</html>
