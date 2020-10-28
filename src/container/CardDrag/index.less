@@ -1,0 +1,36 @@
+body{
+  -moz-user-select: none; /*火狐*/
+  -webkit-user-select: none; /*webkit浏览器*/
+  -ms-user-select: none; /*IE10*/
+  -khtml-user-select: none; /*早期浏览器*/
+  user-select: none;
+}
+
+.box1{
+  position: absolute;
+  width: 300px;
+  height: 50px;
+  border: 1px solid red;
+  cursor: move;
+  background: salmon;
+  z-index: 3000;
+}
+
+.box11 {
+  transition: transform 0.1s;
+}
+
+.box2{
+  overflow-x: hidden;
+  position: relative;
+  overflow-y: scroll;
+  width: 600px;
+  height: 500px;
+  margin-bottom: 200px;
+  border: 1px solid black;
+}
+
+.hezi{
+  position: absolute;
+  left: 0;
+}
