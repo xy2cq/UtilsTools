@@ -3,11 +3,14 @@ import _ from 'lodash'
 
 import './index.less'
 
-class HomeView extends Component {
+class CardDrag extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 3, 4, 5, 6, 7, 8, 9, 3, 4, 5, 6, 7, 8, 9]
+      list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+      cardWidth: 300,
+      cardHeight: 100,
+      lineNum: 2,
     }
     this.source = []
     this.container = null
@@ -33,7 +36,7 @@ class HomeView extends Component {
 
         currentDom.style.zIndex = 5000
         currentDom.style.position = 'fixed'
-        currentDom.style.width = '300px'
+        currentDom.style.width = `${this.state.cardWidth}px`
         currentDom.style.top = `${1 + currentDom.getBoundingClientRect().y + currentDom.parentNode.getBoundingClientRect().y}px`
         currentDom.classList.remove('box11')
         document.getElementsByTagName('*').item(0).style.cursor = 'pointer'
@@ -43,26 +46,63 @@ class HomeView extends Component {
         // 监听全局的dom移动事件
         document.onmousemove = event => {
           var event = event || window.event // 兼容IE浏览器
-
           diffY = event.y - clickY
           diffX = event.x - clickX
-
           currentEvent.target.style.transform = `translate3d(${diffX}px, ${diffY}px, 0)`
           this.source.map((other, otherIndex) => {
             if (otherIndex === index) { return false }
-            if (diffY > 0) {
-              currentIndex = parseInt((diffY + 25) / 50) + index
-              if (originIndex < otherIndex && currentIndex >= otherIndex) {
-                other.style.transform = 'translate3d(0, -50px, 0)'
+            if (diffY > (this.state.cardHeight/2)) {
+              if(diffX < 0 ){
+                currentIndex = parseInt((diffY + this.state.cardHeight/2) / this.state.cardHeight) * this.state.lineNum + index - 1
+                console.log(index, diffY, diffX, currentIndex)
+                if (currentIndex === otherIndex) {
+                  other.style.transform = `translate3d(${this.state.cardWidth}px, -${this.state.cardHeight}px, 0)`
+                }    
+                else {
+                  other.style.transform = 'translate3d(0, 0, 0)'
+                }
+              }
+              else {
+                currentIndex = parseInt((diffY + this.state.cardHeight/2) / this.state.cardHeight) + index
+                if (originIndex < otherIndex && currentIndex >= otherIndex) {                    
+                  other.style.transform = `translate3d(0, -${this.state.cardHeight}px, 0)`  
+                }   else {
+                  other.style.transform = 'translate3d(0, 0, 0)'
+                }        
+              }  
+                  
+            } else if(diffY < -(this.state.cardHeight/2)){
+              currentIndex = parseInt((diffY - this.state.cardHeight/2) / this.state.cardHeight) + index
+              console.log(index, diffY, diffX, currentIndex)
+              if (originIndex > otherIndex && currentIndex <= otherIndex) {
+                if(diffX < 0 ){
+                  other.style.transform = `translate3d(${this.state.cardWidth}px, ${this.state.cardHeight}px, 0)`
+                } else {                  
+                  other.style.transform = `translate3d(0, ${this.state.cardHeight}px, 0)`
+                }   
               } else {
                 other.style.transform = 'translate3d(0, 0, 0)'
               }
             } else {
-              currentIndex = parseInt((diffY - 25) / 50) + index
-              if (originIndex > otherIndex && currentIndex <= otherIndex) {
-                other.style.transform = 'translate3d(0, 50px, 0)'
-              } else {
-                other.style.transform = 'translate3d(0, 0, 0)'
+              if(diffX < 0 ){
+                currentIndex = index - 1
+                console.log(index, diffY, diffX, currentIndex)
+                if (currentIndex === otherIndex) {
+                  other.style.transform = `translate3d(${this.state.cardWidth}px, 0, 0)`
+                }    
+                else {
+                  other.style.transform = 'translate3d(0, 0, 0)'
+                }
+              }
+              if(diffX > 0 ){
+                currentIndex = index + 1
+                console.log(index, diffY, diffX, currentIndex)
+                if (currentIndex === otherIndex) {
+                  other.style.transform = `translate3d(-${this.state.cardWidth}px, 0, 0)`
+                }    
+                else {
+                  other.style.transform = 'translate3d(0, 0, 0)'
+                }
               }
             }
           })
@@ -77,17 +117,17 @@ class HomeView extends Component {
             currentIndex = 0
           }
 
-          currentDom.style.top = `${parseInt(index / 2) * 50}px`
-          currentDom.style.transform = `translate3d(0, ${(currentIndex - originIndex) * 50}px, 0)`
-          currentDom.style.width = '300px'
+          currentDom.style.top = `${parseInt(index / this.state.lineNum) * this.state.cardHeight }px`
+          currentDom.style.transform = `translate3d(0, ${(currentIndex - originIndex) * this.state.cardHeight }px, 0)`
+          currentDom.style.width =  `${this.state.cardWidth}px`
           document.onmousemove = null
           document.onmouseup = null
 
           // 回显的时候去除动画效果
           this.source.map((other, otherIndex) => {
             other.style = null
-            other.style.top = `${50 * parseInt(otherIndex / 2)}px`
-            other.style.left = `${300 * parseInt(otherIndex % 2)}px`
+            other.style.top = `${this.state.cardHeight * parseInt(otherIndex / this.state.lineNum)}px`
+            other.style.left = `${this.state.cardWidth * parseInt(otherIndex % this.state.lineNum)}px`
             other.classList.remove('box11')
           })
 
@@ -103,14 +143,16 @@ class HomeView extends Component {
           list.splice(originIndex, 1)
           list.splice(currentIndex, 0, temp)
 
-          this.setState({ list: JSON.parse(JSON.stringify(list)) })
+          this.setState({ list: JSON.parse(JSON.stringify(list)) }, ()=>{
+            console.log(this.state.list)
+          })
         }
       }
     })
   }
 
   render() {
-    const { list } = this.state
+    const { list, cardWidth, cardHeight, lineNum } = this.state
     this.source = []
     console.log(list)
     return (
@@ -130,7 +172,7 @@ class HomeView extends Component {
           {
             list.map((item, index) => (
               <div
-                style={{ top: 50 * parseInt(index / 2), left: 300 * parseInt(index % 2) }}
+                style={{ top: cardHeight * parseInt(index / lineNum), left: cardWidth * parseInt(index % lineNum) }}
                 key={index}
                 className="box1 box11"
                 draggable="false"
@@ -150,4 +192,4 @@ class HomeView extends Component {
   }
 }
 
-export default HomeView
+export default CardDrag
