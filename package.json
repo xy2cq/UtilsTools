@@ -17,7 +17,6 @@
  "author": "caoqi",
  "license": "ISC",
  "dependencies": {
-  "@antv/g2plot": "^1.1.27",
   "@loadable/component": "5.10.2",
   "antd": "^3.19.8",
   "axios": "1.1.1",
