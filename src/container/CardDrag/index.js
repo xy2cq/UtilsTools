@@ -54,7 +54,7 @@ class CardDrag extends Component {
             if (diffY > (this.state.cardHeight/2)) {
               if(diffX < 0 ){
                 currentIndex = parseInt((diffY + this.state.cardHeight/2) / this.state.cardHeight) * this.state.lineNum + index - 1
-                console.log(index, diffY, diffX, currentIndex)
+                console.log(index, diffY, diffX, currentIndex, 111111)
                 if (currentIndex === otherIndex) {
                   other.style.transform = `translate3d(${this.state.cardWidth}px, -${this.state.cardHeight}px, 0)`
                 }    
@@ -62,27 +62,35 @@ class CardDrag extends Component {
                   other.style.transform = 'translate3d(0, 0, 0)'
                 }
               }
-              else {
-                currentIndex = parseInt((diffY + this.state.cardHeight/2) / this.state.cardHeight) + index
-                if (originIndex < otherIndex && currentIndex >= otherIndex) {                    
-                  other.style.transform = `translate3d(0, -${this.state.cardHeight}px, 0)`  
-                }   else {
-                  other.style.transform = 'translate3d(0, 0, 0)'
-                }        
-              }  
-                  
+              // else {
+              //   currentIndex = parseInt((diffY + this.state.cardHeight/2) / this.state.cardHeight) * this.state.lineNum + index - 1
+              //   if (currentIndex === otherIndex) {           
+              //     other.style.transform = `translate3d(0, -${this.state.cardHeight}px, 0)`  
+              //   }   else {
+              //     other.style.transform = 'translate3d(0, 0, 0)'
+              //   }        
+              // }                    
             } else if(diffY < -(this.state.cardHeight/2)){
-              currentIndex = parseInt((diffY - this.state.cardHeight/2) / this.state.cardHeight) + index
-              console.log(index, diffY, diffX, currentIndex)
-              if (originIndex > otherIndex && currentIndex <= otherIndex) {
-                if(diffX < 0 ){
-                  other.style.transform = `translate3d(${this.state.cardWidth}px, ${this.state.cardHeight}px, 0)`
-                } else {                  
-                  other.style.transform = `translate3d(0, ${this.state.cardHeight}px, 0)`
-                }   
-              } else {
-                other.style.transform = 'translate3d(0, 0, 0)'
+              if(diffX > 0 ){
+                currentIndex = index + parseInt((diffY - this.state.cardHeight/2) / this.state.cardHeight) * this.state.lineNum + 1
+                console.log(index, diffY, diffX, currentIndex, 2222222)
+                if (currentIndex === otherIndex) {
+                  other.style.transform = `translate3d(-${this.state.cardWidth}px, ${this.state.cardHeight}px, 0)`
+                }    
+                else {
+                  other.style.transform = 'translate3d(0, 0, 0)'
+                }
               }
+              // console.log(index, diffY, diffX, currentIndex)
+              // if (originIndex > otherIndex && currentIndex <= otherIndex) {
+              //   if(diffX < 0 ){
+              //     other.style.transform = `translate3d(${this.state.cardWidth}px, ${this.state.cardHeight}px, 0)`
+              //   } else {                  
+              //     other.style.transform = `translate3d(0, ${this.state.cardHeight}px, 0)`
+              //   }   
+              // } else {
+              //   other.style.transform = 'translate3d(0, 0, 0)'
+              // }
             } else {
               if(diffX < 0 ){
                 currentIndex = index - 1
