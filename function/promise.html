@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<script>
+(function(window){ 
+    // 常量定义3promise的三个状态
+    const PENDING = 'pending'
+    const FULFILLED = 'fulfilled'
+    const REJECTED = 'rejected'
+
+    // executor执行器，就是我们new Promise((resolve,reject)=>) 传过来的函数，它是同步执行的
+    function Promise(executor){
+    // 存一下this，因为代码中调用resolve时，在全局下调用的，此时resolve里面this是window
+    // 关于this指向问题，就是谁调用就指向谁，当然也可以用箭头函数处理这个问题
+
+        const self=this 
+        self.status=PENDING
+        self.state=undefined //存传的值
+        self.callbackQueues=[] // 存回调队列
+        
+        // 让promise成功的函数
+        function resolve(value){ 
+            if(self.status!==PENDING) return
+            self.status=FULFILLED
+            self.state=value
+        /*
+            这里会让人感到疑惑？下面是干什么的？
+            onResolved是then方法的第一个参数，onRejected是第二个参数
+            其实promise用了发布订阅的设计模式，promise把then方法的OnResolved和OnRejected方法存到一个数组里
+            不懂没关系，可以看下面的我分析的代码执行步骤
+        */
+            if(self.callbackQueues.length>0){
+                self.callbackQueues.map(item=>{
+                    setTimeout(()=>{
+                        item.onResolved(value)
+                    })
+                })
+            }
+        }
+        
+        // 让promsie失败的函数
+        function reject (reason) {
+            // 如果不是pending状态，就没必要往下了，因为promise的状态一旦改变就无法在更改
+            if(self.status!==PENDING) return 
+            self.status=REJECTED
+            self.state=reason
+
+            if(self.callbackQueues.length>0){
+            self.callbackQueues.map(item=>{
+                setTimeout(()=>{
+                    item.onRejected(value)
+                })
+            })
+        }
+    }
+    // 捕获executor函数里意外错误，如果错误改变状态
+    try {
+        executor(resolve,reject)
+    }catch(err){
+        reject(err)
+    }
+}
+     /**
+      * then方法指定了成功的和失败的回调函数
+      * 返回一个新的promise对象
+      */
+    Promise.prototype.then=function(onResolved,onRejected){
+        const seft=this
+        seft.callbackQueues.push({
+            onResolved,
+            onRejected
+        })
+    }
+    window.Promise=Promise
+})(window)
+
+
+new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+    resolve(1)
+    })
+}).then(res=>{
+    console.log(res);
+})
+
+</script>
+<title>Promise</title>
+</head>
+<body>
+    
+</body>
+</html>
