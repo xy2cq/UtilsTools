@@ -1,4 +1,4 @@
-const framesDatayinian  = [
+const framesData  = [
   {
     "teams": [
       {

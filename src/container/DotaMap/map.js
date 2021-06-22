@@ -5,8 +5,7 @@ import { withRouter } from 'react-router-dom'
 // import { INDEX_PATH } from '~/controllers'
 import CanvasMap from './canvasMap'
 import './style'
-import { resizeImg, onErrorImg, compareSort } from '~/client/utils'
-import Nodata from '~/client/component/NoData'
+import { resizeImg, onErrorImg, compareSort } from '../../utils/index'
 
 const radiantTowerDot = [
   { x: 152.6, y: 178.8, name: '基地下塔', icon: 'radiantMiddle', lane: 3, layer: 4 },
@@ -183,9 +182,6 @@ class Map extends Component {
     const { player1active, player2active, direPlayerList, radiantPlayerList, radiantTowerState, direTowerState, radiantBarracksState, direBarracksState, playersList, dataTimeKey, mapChange, nodata } = this.state
     return (
       <div className="dota-map">
-        {
-          nodata && <Nodata />
-        }
         {
           !nodata &&
           <React.Fragment>
