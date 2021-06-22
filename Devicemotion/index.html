@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no" />
+    <title> HTML5 重力感应效果，实现摇一摇效果 </title>
+    <style>
+        html,body,div,ul,li{
+            margin: 0;
+            padding: 0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        body{
+            width:100%;
+        }
+        #box{
+            width:90%;
+            height:80px;
+            background-color:orange;
+            margin:0 auto;
+            color:#fff;
+            background-position: center -50px;
+        }
+    </style>
+</head>
+<body>
+     
+    <div id="box"></div>
+ 
+<script>
+        //摇晃的力度
+        var SHAKE_THRESHOLD = 2000; 
+        var last_update = 0; 
+        //初始化重力感应位置
+        var x = y = z = last_x = last_y = last_z = 0; 
+ 
+        function deviceMotionHandler(eventData) { 
+            var acceleration = eventData.accelerationIncludingGravity; 
+            var curTime = new Date().getTime(); 
+            if ( (curTime - last_update) > 100 ) { 
+                var diffTime = curTime - last_update; 
+                last_update = curTime; 
+                x = acceleration.x; 
+                y = acceleration.y; 
+                z = acceleration.z; 
+                var speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;  
+                last_x = x; 
+                last_y = y; 
+                last_z = z;
+ 
+                //获取 X Y Z 的数值
+                document.getElementById('box').innerHTML = 'X:'+last_x+'<br> Y:'+last_y+'<br> Z:'+last_z;
+ 
+                //如果速度大于摇晃的力度那么执行alert
+                if (speed > SHAKE_THRESHOLD) { 
+                    alert('摇一摇');    
+                }
+            } 
+        }
+        //判断是否支持重力感应
+        if (window.DeviceMotionEvent) { 
+            window.addEventListener('devicemotion', deviceMotionHandler, false); 
+        } else { 
+            alert('not support mobile event'); 
+        } 
+ 
+</script>
+</body>
+</html>

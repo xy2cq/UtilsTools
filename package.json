@@ -8,7 +8,7 @@
   "tools"
  ],
  "scripts": {
-  "i": "yarn install --registry=http://npm.vpgame.cn",
+  "i": "yarn install",
   "start": "npm run start:dev",
   "start:dev": "cross-env NODE_ENV=development webpack-dev-server --env development --config webpack/webpack.common.conf.js --open",
   "build:dev": "cross-env NODE_ENV=development webpack --env production --config webpack/webpack.common.conf.js",

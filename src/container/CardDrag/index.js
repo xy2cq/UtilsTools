@@ -10,7 +10,7 @@ class CardDrag extends Component {
       list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       cardWidth: 300,
       cardHeight: 100,
-      lineNum: 2,
+      lineNum: 3,
     }
     this.source = []
     this.container = null
@@ -54,7 +54,6 @@ class CardDrag extends Component {
             if (diffY > (this.state.cardHeight/2)) {
               if(diffX < 0 ){
                 currentIndex = parseInt((diffY + this.state.cardHeight/2) / this.state.cardHeight) * this.state.lineNum + index - 1
-                console.log(index, diffY, diffX, currentIndex, 111111)
                 if (currentIndex === otherIndex) {
                   other.style.transform = `translate3d(${this.state.cardWidth}px, -${this.state.cardHeight}px, 0)`
                 }    
@@ -93,9 +92,9 @@ class CardDrag extends Component {
               // }
             } else {
               if(diffX < 0 ){
-                currentIndex = index - 1
-                console.log(index, diffY, diffX, currentIndex)
-                if (currentIndex === otherIndex) {
+                currentIndex = parseInt(diffX / this.state.cardWidth) + index
+                console.log(index, diffY, diffX, currentIndex)                
+                if (originIndex > otherIndex && currentIndex <= otherIndex) {
                   other.style.transform = `translate3d(${this.state.cardWidth}px, 0, 0)`
                 }    
                 else {
@@ -103,9 +102,9 @@ class CardDrag extends Component {
                 }
               }
               if(diffX > 0 ){
-                currentIndex = index + 1
-                console.log(index, diffY, diffX, currentIndex)
-                if (currentIndex === otherIndex) {
+                currentIndex = parseInt(diffX / this.state.cardWidth) + index
+                console.log(index, diffY, diffX, currentIndex, otherIndex)                
+                if (originIndex > otherIndex && currentIndex <= otherIndex)  {
                   other.style.transform = `translate3d(-${this.state.cardWidth}px, 0, 0)`
                 }    
                 else {
@@ -191,6 +190,7 @@ class CardDrag extends Component {
                 }}
               >
                 {item}
+                index:{index}
               </div>
             ))
           }
